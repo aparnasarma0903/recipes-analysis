@@ -35,7 +35,40 @@ Below is the head of the `food_cleaned` dataframe:
 
 PROMPT 2: Embed at least one plotly plot you created in your notebook that displays the distribution of a single column (see Part 2: Report for instructions). Include a 1-2 sentence explanation about your plot, making sure to describe and interpret any trends present, and how they answer your initial question. (Your notebook will likely have more visualizations than your website, and that’s fine. Feel free to embed more than one univariate visualization in your website if you’d like, but make sure that each embedded plot is accompanied by a description.)
 
+## Boxplots for Food Data
+
+Below are interactive boxplots for the `food_cleaned` dataset:
+
+<iframe
+  src="assets/food_boxplots.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
 PROMPT 3: Embed at least one plotly plot that displays the relationship between two columns. Include a 1-2 sentence explanation about your plot, making sure to describe and interpret any trends present and how they answer your initial question. (Your notebook will likely have more visualizations than your website, and that’s fine. Feel free to embed more than one bivariate visualization in your website if you’d like, but make sure that each embedded plot is accompanied by a description.)
+
+## Correlation Matrix of High-Rated Recipes
+
+Below is an interactive heatmap showing the correlation matrix for recipes with average ratings between 4.5 and 5:
+
+<iframe
+  src="assets/high_rated_correlation_heatmap.html"
+  width="800"
+  height="800"
+  frameborder="0"
+></iframe>
+
+## Scatter Plot: Avg Rating vs. Minutes
+
+Below is an interactive scatter plot showing the relationship between average ratings and the time in minutes:
+
+<iframe
+  src="assets/scatter_avg_rating_vs_minutes.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 PROMPT 4: Embed at least one grouped table or pivot table in your website and explain its significance.
 
