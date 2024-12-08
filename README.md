@@ -195,3 +195,59 @@ At this stage, I believe the model is **good enough** for a baseline, but there 
 
 
 ## Final Model
+
+In our efforts to improve the model's performance, we experimented with a variety of techniques to enhance the predictive power of the features. These included adding polynomial features, leveraging multi-label binarization, and incorporating user reviews. Here’s a breakdown of the features:
+
+**Polynomial Features for "minutes":**
+We hypothesized that the minutes feature, which represents the cooking time for recipes, might have a non-linear relationship with the avg_rating as evidenced by the bivariate analysis earlier. By adding polynomial features, we aimed to capture any non-linear patterns that could exist between cooking time and rating. Polynomial transformations allow the model to learn more complex patterns in the data, potentially improving prediction accuracy by capturing relationships that aren't strictly linear.
+
+**Tag Count Feature:**
+This feature calculates the number of tags associated with each recipe. The tags feature is multi-label, meaning a recipe can have multiple tags. By calculating the count of tags, we aimed to quantify the complexity or diversity of each recipe. We believed that the number of tags could correlate with recipe complexity or popularity, which might influence ratings. More tags could indicate higher diversity, leading to either higher or lower ratings depending on the type of recipe.
+
+**MultiLabel Binarization for "tags":**
+The multi-label binarization was used to handle the categorical nature of the tags feature. This method creates binary columns for each tag, allowing the model to learn how the presence of specific tags influences the avg_rating. Multi-label binarization allows us to better handle the multi-label nature of the tags feature, enabling the model to detect interactions between different tags and ratings more effectively.
+
+**User Reviews:**
+We also explored incorporating user reviews as a feature, believing that the sentiment or length of user reviews could offer valuable insights into recipe ratings.
+However, when we included user reviews, the model's performance actually worsened. This could be due to the noisy, unstructured nature of the review text, which may not have been processed effectively by the model in its raw form.
+
+--- 
+
+
+For modeling, we chose a Random Forest Regressor, an ensemble learning method known for its robustness and ability to handle complex, non-linear data. Random Forests are particularly well-suited for high-dimensional datasets and can handle a wide range of relationships between features and the target variable.
+
+We used **GridSearchCV** to optimize the hyperparameters of the model. The hyperparameters tuned were:
+
+* **Polynomial Degree:** We tested polynomial degrees from 1 to 4 to account for possible non-linear relationships between the minutes feature and the target variable.
+- **Random Forest Hyperparameters:**
+    - max_depth: Controlled the maximum depth of the trees.
+    - min_samples_split: Set the minimum number of samples required to split an internal node.
+    - min_samples_leaf: Defined the minimum number of samples required to be at a leaf node.
+n_estimators: The number of trees in the forest, affecting the variance of the model.
+
+The best-performing hyperparameters were:
+* Polynomial Degree: 4
+* Random Forest:
+    * max_depth: None
+    * min_samples_split: 10
+    * min_samples_leaf: 2
+    * n_estimators: 150
+
+Model Performance Comparison: Final Model vs. Baseline Model
+Despite the extensive feature engineering and hyperparameter tuning, the performance of the final model was not substantially improved compared to the baseline model. The Root Mean Squared Error (RMSE) for both the baseline and the final model remained at approximately 0.50.
+
+This suggests that the dataset itself posed significant challenges. The distribution of ratings against other variables was almost uniform, and no clear associations between features and ratings were evident. Moreover, the size of the dataset made it difficult to pinpoint meaningful relationships, as the vast amount of data likely contributed to noise and complexity.
+
+---
+
+**Challenges and Lessons Learned:**
+
+Our efforts to improve the model highlighted some key challenges - 
+
+* **No Clear Associations:** The dataset did not show clear correlations between the features and the target variable (avg_rating). This lack of strong associations made it hard to enhance the model’s predictive power.
+* **User Reviews:** Although we initially thought user reviews could add valuable information, including them as a feature actually worsened model performance. This suggests that the reviews might contain too much noise or may require more advanced text processing techniques that weren’t incorporated.
+* **Large, Complex Dataset:** Despite our feature engineering and model tuning, the large size and complexity of the dataset made it difficult to achieve a significant improvement over the baseline model. The randomness and variety in the data likely overshadowed any small improvements in prediction accuracy.
+
+
+### Conclusion
+In conclusion, while we experimented with several feature engineering techniques and model tuning methods, we did not observe a substantial improvement in the performance of the model. The dataset’s inherent complexity, lack of clear feature-target relationships, and large size were likely key factors in limiting improvements. Nonetheless, the process allowed us to explore different avenues for feature transformation and hyperparameter optimization, providing valuable insights into the challenges of working with large and complex datasets.
