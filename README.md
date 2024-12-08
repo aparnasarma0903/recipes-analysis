@@ -1,28 +1,45 @@
 # recipes-analysis
 dataset analysis for final eecs398 project
 
-# Introduction
+## Introduction
 
-TODO: answer prompt and remove it.
+In this project we investigated the recipes and ratings dataset. 
+The recipes and ratings dataset comes from food.com and contains columns describing the recipes themselves like ingredients, descriptions, tags, and cook time, as well as ratings and reviews.
 
-PROMPT: Provide an introduction to your dataset, and clearly state the one question your homework is centered around. Why should readers of your website care about the dataset and your question specifically? Report the number of rows in the dataset, the names of the columns that are relevant to your question, and descriptions of those relevant columns.
+Some relationships that I was particularly interested in were:
 
+* which aspects of a recipe contribute to its average rating?
+* how does user reviews affect subsequent user reviews?
+* what about the ingredients and the health aspects of recipes?
 
-num rows: 234429
+Ultimately, I chose to focus on the complexity of a recipe, as it relates to cook time, number of steps, and number of ingredients, and how that affects the ratings of a recipe.
 
-# Data Cleaning and Exploratory Data Analysis
+This dataset is quite large, containing 234429 rows. Some relevant columns we will see in the analysis are:
+* n_steps (number of steps, int)
+* n_ingredients (number of ingredients, int)
+* minutes (how long a recipe takes, int)
+* avg_rating (average rating for a recipe, using the ratings column which takes on values [0, 5])
+* tags (the tags that user choose to associate their recipe with when submitting, list)
 
-TODO: answer the prompt for the first part and remove it. check if embedding of food_cleaned worked. 
-TODO: embed the univariate plotly plot. - the boxplots? answer the prompt and remove it 
-TODO: embed the bivariate plotly plot and ANSWER THE PROMPTS
-- the correlation heatmap
-- ratings of 4 and 5 vs all the variables
-TODO: embed the table for the aggregate columns and answer the prompts
-TODO: imputation lowkey move this up but just answer the prompt, also create the distributions plot! 
+## Data Cleaning and Exploratory Data Analysis
+Original Issues:
+The dataset, derived from user-submitted recipes and interactions, inherently contained missing values, outliers, and inconsistencies. These issues likely arose from variability in user inputs, irregular data recording, or system constraints.
 
-PROMPT 1: Describe, in detail, the data cleaning steps you took and how they affected your analyses. The steps should be explained in reference to the data generating process. Show the head of your cleaned DataFrame (see Part 2: Report for instructions).
+The data included two separate datasets:  
+1. `RAW_recipes.csv` (recipe details)  
+2. `RAW_interactions.csv` (user interactions, including ratings) 
 
-## Food Data (Head)
+These two datasets were merged in order to analyze recipes and their associated user ratings at the same time.
+
+Cleaning Choices:
+Cleaning steps were designed to address these issues while preserving the integrity of the data:
+* Outliers were managed using domain-specific thresholds (e.g., relaxing minutes bounds), acknowledging the natural variability in cooking times and recipe complexity.
+* The only missing values were in the ratings column, which meant that those recipes had no reviews yet. I chose not to impute any of these missing values, since it still makes sense for those missing values to exist. Later, for the prediction portion, these rows were dropped for the purpose of meaningful analysis.
+
+>>One major limitation that may have affected some of the analysis in this report was that the sheer size of the dataset consistently crashed the device. In order to produce meaningful insights, I had to work with a smaller subset of the data for some time until some storage issues were resolved. At first, I was aggressive with removing outliers and exploring smaller subsets of the data to complete the initial exploratory data analysis, and even considered changing the research question multiple times to mitigate this issue. 
+
+Impact on Analyses:
+The cleaned dataset enabled robust exploratory and inferential analyses, reducing bias and enhancing the interpretability of patterns, such as the relationship between cooking time and ratings.
 
 Below is the head of the `food_cleaned` dataframe:
 
@@ -33,11 +50,10 @@ Below is the head of the `food_cleaned` dataframe:
   frameborder="0"
 ></iframe>
 
-PROMPT 2: Embed at least one plotly plot you created in your notebook that displays the distribution of a single column (see Part 2: Report for instructions). Include a 1-2 sentence explanation about your plot, making sure to describe and interpret any trends present, and how they answer your initial question. (Your notebook will likely have more visualizations than your website, and that’s fine. Feel free to embed more than one univariate visualization in your website if you’d like, but make sure that each embedded plot is accompanied by a description.)
-
-## Boxplots for Food Data
-
-Below are interactive boxplots for the `food_cleaned` dataset:
+---
+Univariate Analysis:
+These boxplots show the distributions of the columns we are looking at to analyze the "complexity" of a review (minutes, n-ingredients, n_steps)
+We can see that all the variables take on a large range of values between each of their units, respectively. in addition, there are so many reviews, that the data for n-steps and n_ingredients is pretty evenly distributed across the entire range of values, while minutes is skewed to the right.
 
 <iframe
   src="assets/food_boxplots.html"
@@ -46,9 +62,8 @@ Below are interactive boxplots for the `food_cleaned` dataset:
   frameborder="0"
 ></iframe>
 
-PROMPT 3: Embed at least one plotly plot that displays the relationship between two columns. Include a 1-2 sentence explanation about your plot, making sure to describe and interpret any trends present and how they answer your initial question. (Your notebook will likely have more visualizations than your website, and that’s fine. Feel free to embed more than one bivariate visualization in your website if you’d like, but make sure that each embedded plot is accompanied by a description.)
-
-## Correlation Matrix of High-Rated Recipes
+---
+Bivariate Analysis:
 
 Below is an interactive heatmap showing the correlation matrix for recipes with average ratings between 4.5 and 5:
 
@@ -59,7 +74,7 @@ Below is an interactive heatmap showing the correlation matrix for recipes with 
   frameborder="0"
 ></iframe>
 
-## Scatter Plot: Avg Rating vs. Minutes
+I chose to zoom in on the highly rated recipes to see if there were any particular categories that led to a more positive review. Initially, looking at the entire dataset didn't show any clear association between any variables. Even with zooming in, there are no clear associations between avg_ratings and any other categories. The only associations we see are in the columns from the nutrition section, where calories of a recipe is associated positively with carbs and proteins, which makes sense. 
 
 Below is an interactive scatter plot showing the relationship between average ratings and the time in minutes:
 
@@ -70,7 +85,9 @@ Below is an interactive scatter plot showing the relationship between average ra
   frameborder="0"
 ></iframe>
 
-PROMPT 4: Embed at least one grouped table or pivot table in your website and explain its significance.
+This view shows that majority of the highly rated recipes are between 0 and 50 minutes.
+
+---
 <iframe
   src="assets/top_tags_avg_rating.html"
   width="800"
@@ -85,6 +102,11 @@ PROMPT 4: Embed at least one grouped table or pivot table in your website and ex
   frameborder="0"
 ></iframe>
 
+These tables highlight the top 10 and bottom 10 tags based on their average ratings. They provide insight into the types of recipes that users rate highly or poorly. For example:  
+- **High-rated tags** may indicate popular recipe styles or cuisines.  
+- **Low-rated tags** can guide recipe creators to improve content in those categories.  
+
+
 <iframe
   src="assets/tag_calories.html"
   width="800"
@@ -92,12 +114,11 @@ PROMPT 4: Embed at least one grouped table or pivot table in your website and ex
   frameborder="0"
 ></iframe>
 
-<iframe
-  src="assets/contributor_activity.html"
-  width="800"
-  height="600"
-  frameborder="0"
-></iframe>
+This table groups recipes by tags and displays statistics on caloric content (`mean`, `median`, `std`). It helps answer questions like:  
+- Which recipe categories tend to have higher caloric content?  
+- How variable are the calories within a tag?  
+
+Such insights are valuable for users focusing on nutrition, meal planning, or dietary restrictions.  
 
 <iframe
   src="assets/recipes_over_time.html"
@@ -106,10 +127,14 @@ PROMPT 4: Embed at least one grouped table or pivot table in your website and ex
   frameborder="0"
 ></iframe>
 
-PROMPT 5: If you imputed any missing values, visualize the distributions of the imputed columns before and after imputation. Describe which imputation technique you chose to use and why. If you didn’t fill in any missing values, discuss why not.
+This visualization aggregates recipes by the year of submission, providing a temporal perspective on recipe trends. It answers questions like:  
+- When was the peak of user submissions?  
+- Are recipe submissions increasing or decreasing over time?  
 
-# Framing a Prediction Problem
+Such trends can guide platform strategies and provide historical context to the dataset.  
 
-# Baseline Model
+## Framing a Prediction Problem
 
-# Final Model
+## Baseline Model
+
+## Final Model
