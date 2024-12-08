@@ -1,5 +1,6 @@
-# recipes-analysis
-dataset analysis for final eecs398 project
+# The Recipe for Ratings: A Journey Through Predictive Modeling
+
+By Aparna Sarma (sarmaa@umich.edu)
 
 ## Introduction
 
