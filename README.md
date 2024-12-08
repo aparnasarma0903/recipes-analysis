@@ -91,14 +91,14 @@ This view shows that majority of the highly rated recipes are between 0 and 50 m
 <iframe
   src="assets/top_tags_avg_rating.html"
   width="800"
-  height="600"
+  height="300"
   frameborder="0"
 ></iframe>
 
 <iframe
   src="assets/bottom_tags_avg_rating.html"
   width="800"
-  height="600"
+  height="300"
   frameborder="0"
 ></iframe>
 
@@ -110,7 +110,7 @@ These tables highlight the top 10 and bottom 10 tags based on their average rati
 <iframe
   src="assets/tag_calories.html"
   width="800"
-  height="600"
+  height="300"
   frameborder="0"
 ></iframe>
 
@@ -123,7 +123,7 @@ Such insights are valuable for users focusing on nutrition, meal planning, or di
 <iframe
   src="assets/recipes_over_time.html"
   width="800"
-  height="600"
+  height="300"
   frameborder="0"
 ></iframe>
 
@@ -135,6 +135,63 @@ Such trends can guide platform strategies and provide historical context to the 
 
 ## Framing a Prediction Problem
 
+**Problem Statement:**  
+The goal of this project is to predict the **average rating** (`avg_rating`) of recipes based on certain features such as preparation time (`minutes`) and recipe tags (`tags`). This is a **regression problem** since we are predicting a continuous variable (the average rating) that ranges from 1 to 5.
+
+**Response Variable:**  
+The response variable we are predicting is the **`avg_rating`** of each recipe. We chose this as the target variable because understanding the factors influencing recipe ratings can help us identify trends, optimize recipe recommendations, and improve user engagement.
+
+**Model Type:**  
+Given that the target variable is continuous, we are performing **regression** rather than classification. The model we are using is a **Linear Regression** model, which predicts the target variable based on a linear combination of the input features.
+
+**Evaluation Metric:**  
+We are using **Root Mean Squared Error (RMSE)** as the metric to evaluate the model's performance. RMSE is a popular metric for regression problems because it penalizes large errors more heavily due to its squared nature. This makes it particularly useful for identifying how well the model performs across all the predicted ratings, particularly in cases where small errors are tolerable but large errors are not.
+
+We chose RMSE over other metrics like Mean Absolute Error (MAE) because RMSE is more sensitive to outliers, which is important in this context since extreme ratings (e.g., 1 or 5) might indicate significant user dissatisfaction or satisfaction. Therefore, we want to ensure that our model performs well across the entire range of ratings.
+
+**Time of Prediction:**  
+At the time of prediction, we would only have access to the **preparation time (`minutes`)** and **recipe tags (`tags`)** as input features. These are the features available before the recipe is rated, as the rating is a result of the user’s feedback after the recipe is consumed. Therefore, no future data or post-rating information should be used during model training or prediction.
+
+### Model Pipeline  
+
+The pipeline used for this analysis preprocesses the features and applies the Linear Regression model as follows:
+1. **Preprocessing:**  
+   - `minutes` is treated as a numerical feature.
+   - `tags` are transformed into binary columns (one for each possible tag) using the **MultiLabelBinarizer**.
+
+2. **Model:**  
+   - A **Linear Regression** model is then applied to predict the `avg_rating`.
+
+**Cross-validation:**  
+We also perform **5-fold cross-validation** to ensure the model's robustness and reduce the potential for overfitting. The **negative mean squared error** is used as the scoring metric for cross-validation.
+
+The evaluation metrics obtained from the model show the RMSE and cross-validation results, which indicate how well the model is generalizing to unseen data.
+
 ## Baseline Model
+
+In this analysis, we built a **Linear Regression** model to predict the **average rating** (`avg_rating`) of recipes. The model uses two features:
+1. **`minutes`** (quantitative): This feature represents the preparation time of the recipe in minutes.
+2. **`tags`** (nominal): This feature is a list of tags associated with each recipe, such as "vegetarian," "gluten-free," etc.
+
+For the **`tags`** feature, which is nominal, we used the **MultiLabelBinarizer** to perform encoding. This process converts each unique tag into a separate binary column, where each column represents the presence or absence of a particular tag in the recipe. For example, if a recipe is tagged with "vegetarian" and "gluten-free," the corresponding columns for these tags will be set to 1, while all other tag columns will be set to 0.
+
+The **`minutes`** feature was treated as a **quantitative** feature, and no additional encoding was necessary since it is already in a numerical format.
+
+### Model Performance
+
+The baseline model was evaluated using the Root Mean Squared Error (RMSE) and cross-validation Mean Squared Error (MSE). The performance metrics are as follows:
+- **Baseline Model RMSE: 0.50**
+- **Cross-validation MSE: 0.2406**
+
+The RMSE of 0.50 indicates that, on average, the predicted ratings are off by 0.5 points, which suggests that the model performs relatively well in predicting the ratings, given the scale of ratings (1 to 5). 
+
+The cross-validation MSE is 0.2406, which indicates that the model's performance is stable across different subsets of the data and that the errors in the predictions are consistently small.
+
+### Model Evaluation and Conclusion
+
+Overall, the model appears to perform well with an RMSE of 0.50. However, there are still opportunities for improvement. Since linear regression is a simple model, it might not capture all of the complex relationships between the features and the target variable. We could explore more sophisticated models, such as decision trees or random forests, which might better capture non-linear patterns in the data.
+
+At this stage, I believe the model is **good enough** for a baseline, but there is room to explore more advanced modeling techniques to further reduce the error. The cross-validation scores indicate that the model generalizes reasonably well, but fine-tuning the model or using additional features could improve the predictions further.
+
 
 ## Final Model
