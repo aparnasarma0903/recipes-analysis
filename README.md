@@ -71,6 +71,40 @@ Below is an interactive scatter plot showing the relationship between average ra
 ></iframe>
 
 PROMPT 4: Embed at least one grouped table or pivot table in your website and explain its significance.
+<iframe
+  src="assets/top_tags_avg_rating.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="assets/bottom_tags_avg_rating.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="assets/tag_calories.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="assets/contributor_activity.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="assets/recipes_over_time.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 PROMPT 5: If you imputed any missing values, visualize the distributions of the imputed columns before and after imputation. Describe which imputation technique you chose to use and why. If you didn’t fill in any missing values, discuss why not.
 
